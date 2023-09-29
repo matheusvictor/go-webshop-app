@@ -29,18 +29,14 @@
                         </tr>
                     </thead>
                     <tbody>
+                        {{ range . }} <!-- Itera sob a lista de produtos passadas na função index()-->
                         <tr>
-                            <td>Camiseta</td>
-                            <td>Bem bonita</td>
-                            <td>29</td>
-                            <td>10</td>
-                        </tr>
-                        <tr>
-                            <td>Notebook</td>
-                            <td>Muito rápido</td>
-                            <td>1999</td>
-                            <td>2</td>
-                        </tr>
+                            <td>{{ .Nome }}</td>
+                            <td>{{ .Descricao }}</td>
+                            <td>{{ .Preco }}</td>
+                            <td>{{ .Quantidade }}</td>
+                        </tr> 
+                        {{ end }}               
                     </tbody>
                 </table>
             </div>
