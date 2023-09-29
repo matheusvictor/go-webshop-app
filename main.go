@@ -1,9 +1,10 @@
 package main
 
 import (
-	"alura/go-webshop-app/produtos"
 	"html/template"
 	"net/http"
+
+	"alura/go-webshop-app/products"
 )
 
 var myTemplate = template.Must(template.ParseGlob("templates/*.html"))
@@ -14,10 +15,10 @@ func main() {
 }
 
 func index(w http.ResponseWriter, r *http.Request) {
-	produtos := []produtos.Produto{
-		{Nome: "Caneta azul", Descricao: "Azul caneta", Preco: 2, Quantidade: 100},
+	products := []products.Product{
+		{Name: "Caneta azul", Description: "Azul caneta", Price: 2, Quantity: 100},
 		{"Tênis", "Air Jordan", 2600, 10},
 	}
 
-	myTemplate.ExecuteTemplate(w, "Index", produtos)
+	myTemplate.ExecuteTemplate(w, "Index", products)
 }
