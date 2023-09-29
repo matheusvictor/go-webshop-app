@@ -4,12 +4,16 @@ import (
 	"html/template"
 	"net/http"
 
+	"alura/go-webshop-app/database"
 	"alura/go-webshop-app/products"
 )
 
 var myTemplate = template.Must(template.ParseGlob("templates/*.html"))
 
 func main() {
+	db := database.GetDBInstance()
+	defer db.Close() // defer será executado por último
+
 	http.HandleFunc("/", index)
 	http.ListenAndServe(":8000", nil)
 }
