@@ -6,7 +6,7 @@ import (
 	_ "github.com/lib/pq"
 )
 
-func connectDatabase() *sql.DB {
+func ConnectDatabase() *sql.DB {
 	connection := "user=postgres dbname=alura-webshop password=root host=localhost sslmode=disable"
 	db, err := sql.Open("postgres", connection)
 
@@ -14,8 +14,4 @@ func connectDatabase() *sql.DB {
 		panic(err.Error())
 	}
 	return db
-}
-
-func GetDBInstance() *sql.DB {
-	return connectDatabase()
 }
