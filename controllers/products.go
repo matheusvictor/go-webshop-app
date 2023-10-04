@@ -37,5 +37,5 @@ func Insert(w http.ResponseWriter, r *http.Request) {
 
 		models.Create(name, desc, price, quant)
 	}
-	http.Redirect(w, r, "/", 201)
+	http.Redirect(w, r, "/", 303)
 }
