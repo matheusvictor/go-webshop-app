@@ -48,6 +48,42 @@ func FindAll() []Product {
 	return products
 }
 
+func FindById(id int) Product {
+	db := database.ConnectDatabase()
+
+	selectedProduct, err := db.Query("SELECT * FROM products WHERE id=$1", id)
+	if err != nil {
+		panic(err.Error())
+	}
+
+	updatedProduct := Product{}
+
+	for selectedProduct.Next() {
+		var id, quantity int
+		var name, description string
+		var price float64
+
+		err := selectedProduct.Scan(
+			&id,
+			&name,
+			&description,
+			&quantity,
+			&price,
+		)
+		if err != nil {
+			panic(err.Error())
+		}
+
+		updatedProduct.Id = id
+		updatedProduct.Name = name
+		updatedProduct.Quantity = quantity
+		updatedProduct.Description = description
+		updatedProduct.Price = price
+	}
+	defer db.Close()
+	return updatedProduct
+}
+
 func Create(name string, desc string, price float64, quant int) {
 	db := database.ConnectDatabase()
 
@@ -67,5 +103,16 @@ func Delete(id int) {
 		panic(err.Error())
 	}
 	deleteProduct.Exec(id)
+	defer db.Close()
+}
+
+func Update(id int) {
+	db := database.ConnectDatabase()
+
+	editProduct, err := db.Prepare("ALTER TABLE products WHERE id = $1")
+	if err != nil {
+		panic(err.Error())
+	}
+	editProduct.Exec(id)
 	defer db.Close()
 }

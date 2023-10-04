@@ -48,3 +48,13 @@ func Delete(w http.ResponseWriter, r *http.Request) {
 	models.Delete(id)
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
+
+func Update(w http.ResponseWriter, r *http.Request) {
+	id, err := strconv.Atoi(r.URL.Query().Get("id"))
+	if err != nil {
+		log.Println("Erro ao converter ID:", err)
+	}
+
+	productToUpdate := models.FindById(id)
+	myTemplate.ExecuteTemplate(w, "Edit", productToUpdate)
+}
