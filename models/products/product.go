@@ -3,10 +3,10 @@ package models
 import "alura/go-webshop-app/database"
 
 type Product struct {
-	Id                int32
+	Id                int
 	Name, Description string
 	Price             float64
-	Quantity          int32
+	Quantity          int
 }
 
 func FindAll() []Product {
@@ -21,7 +21,7 @@ func FindAll() []Product {
 	products := []Product{}
 
 	for selectAllProducts.Next() {
-		var id, quantity int32
+		var id, quantity int
 		var name, description string
 		var price float64
 
@@ -45,4 +45,15 @@ func FindAll() []Product {
 	}
 	defer db.Close()
 	return products
+}
+
+func Create(name string, desc string, price float64, quant int) {
+	db := database.ConnectDatabase()
+
+	insertProduct, err := db.Prepare("INSERT INTO products (name, description, quantity, price) VALUES ($1, $2, $3, $4)")
+	if err != nil {
+		panic(err.Error())
+	}
+	insertProduct.Exec(name, desc, quant, price)
+	defer db.Close()
 }
