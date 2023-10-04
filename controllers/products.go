@@ -39,3 +39,12 @@ func Insert(w http.ResponseWriter, r *http.Request) {
 	}
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
+
+func Delete(w http.ResponseWriter, r *http.Request) {
+	id, err := strconv.Atoi(r.URL.Query().Get("id"))
+	if err != nil {
+		log.Println("Erro ao converter ID:", err)
+	}
+	models.Delete(id)
+	http.Redirect(w, r, "/", http.StatusSeeOther)
+}
