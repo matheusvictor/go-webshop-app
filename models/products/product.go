@@ -1,6 +1,8 @@
 package models
 
-import "alura/go-webshop-app/database"
+import (
+	"alura/go-webshop-app/database"
+)
 
 type Product struct {
 	Id                int
@@ -56,7 +58,7 @@ func FindById(id int) Product {
 		panic(err.Error())
 	}
 
-	updatedProduct := Product{}
+	foundedProduct := Product{}
 
 	for selectedProduct.Next() {
 		var id, quantity int
@@ -74,14 +76,14 @@ func FindById(id int) Product {
 			panic(err.Error())
 		}
 
-		updatedProduct.Id = id
-		updatedProduct.Name = name
-		updatedProduct.Quantity = quantity
-		updatedProduct.Description = description
-		updatedProduct.Price = price
+		foundedProduct.Id = id
+		foundedProduct.Name = name
+		foundedProduct.Quantity = quantity
+		foundedProduct.Description = description
+		foundedProduct.Price = price
 	}
 	defer db.Close()
-	return updatedProduct
+	return foundedProduct
 }
 
 func Create(name string, desc string, price float64, quant int) {
@@ -106,13 +108,14 @@ func Delete(id int) {
 	defer db.Close()
 }
 
-func Update(id int) {
+func Update(id int, name string, desc string, quantity int, price float64) {
 	db := database.ConnectDatabase()
 
-	editProduct, err := db.Prepare("ALTER TABLE products WHERE id = $1")
+	update, err := db.Prepare("UPDATE products SET name=$1, description=$2, quantity=$3, price=$4 WHERE id=$5")
 	if err != nil {
 		panic(err.Error())
 	}
-	editProduct.Exec(id)
+
+	update.Exec(name, desc, quantity, price, id)
 	defer db.Close()
 }

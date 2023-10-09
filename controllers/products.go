@@ -49,7 +49,8 @@ func Delete(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
 
-func Update(w http.ResponseWriter, r *http.Request) {
+func Edit(w http.ResponseWriter, r *http.Request) {
+	/** Renderiza página de edição */
 	id, err := strconv.Atoi(r.URL.Query().Get("id"))
 	if err != nil {
 		log.Println("Erro ao converter ID:", err)
@@ -57,4 +58,29 @@ func Update(w http.ResponseWriter, r *http.Request) {
 
 	productToUpdate := models.FindById(id)
 	myTemplate.ExecuteTemplate(w, "Edit", productToUpdate)
+}
+
+func Update(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "POST" {
+		id, err := strconv.Atoi(r.FormValue("id"))
+		if err != nil {
+			log.Println("Erro ao converter ID para inteiro:", err)
+		}
+
+		name := r.FormValue("name")
+		description := r.FormValue("description")
+
+		price, err := strconv.ParseFloat(r.FormValue("price"), 64)
+		if err != nil {
+			log.Println("Erro ao converter preço para float:", err)
+		}
+
+		quantity, err := strconv.Atoi(r.FormValue("quantity"))
+		if err != nil {
+			log.Println("Erro ao converter quantidade para inteiro:", err)
+		}
+
+		models.Update(id, name, description, quantity, price)
+	}
+	http.Redirect(w, r, "/", http.StatusSeeOther)
 }
